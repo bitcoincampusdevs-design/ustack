@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { ArrowDownToLine, ArrowUpFromLine, Send, Eye, EyeOff, Flame } from "lucide-react";
+import { ArrowDownToLine, ArrowUpFromLine, Send, Eye, EyeOff, Flame, ShieldCheck } from "lucide-react";
 import { vaults, activity, tips, totalBalanceSats, lockedSats, availableSats, monthlyStackedSats, monthlyGoalSats, fmtSats, fmtBTC, type Vault } from "@/lib/ustack-data";
 import { CountUp } from "../CountUp";
 import { ProgressRing } from "../ProgressRing";
@@ -74,6 +74,30 @@ export function HomeScreen({ onOpenVault, onDeposit, onWithdraw, onCreateVault }
         <QuickAction icon={ArrowUpFromLine} label="Withdraw" onClick={onWithdraw} grad="grad-teal" />
         <QuickAction icon={Send} label="Send" onClick={onWithdraw} grad="grad-mint" />
       </div>
+
+      {/* Price Protection indicator */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+        className="flex items-center justify-between rounded-2xl px-4 py-3 border border-white/5"
+        style={{ background: "oklch(0.78 0.13 195 / 0.08)" }}
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center grad-teal shrink-0">
+            <ShieldCheck className="w-5 h-5 text-background" />
+          </div>
+          <div>
+            <div className="text-sm font-semibold">Price Protection</div>
+            <div className="text-xs text-muted-foreground">Guards your stack against dips</div>
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5 rounded-full px-2.5 py-1" style={{ background: "oklch(0.78 0.13 195 / 0.15)" }}>
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ background: "oklch(0.82 0.13 190)" }} />
+            <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: "oklch(0.82 0.13 190)" }} />
+          </span>
+          <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: "oklch(0.82 0.13 190)" }}>Active</span>
+        </div>
+      </motion.div>
 
       {/* Vault carousel */}
       <div>
