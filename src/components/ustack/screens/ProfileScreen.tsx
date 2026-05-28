@@ -1,0 +1,93 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { ChevronRight, Fingerprint, Bell, ShieldCheck, HelpCircle, Info, LogOut, Lock } from "lucide-react";
+
+export function ProfileScreen() {
+  const [protection, setProtection] = useState(true);
+  const [biometrics, setBiometrics] = useState(true);
+  const [threshold, setThreshold] = useState(2);
+
+  return (
+    <div className="px-5 pt-2 flex flex-col gap-6">
+      {/* profile header */}
+      <div className="rounded-3xl glass-strong p-5 flex items-center gap-4">
+        <div className="w-16 h-16 rounded-2xl grad-mint flex items-center justify-center text-background text-xl font-semibold">NK</div>
+        <div className="flex-1">
+          <div className="text-lg font-semibold">Norman K.</div>
+          <div className="text-xs text-muted-foreground">@norman · +260 ••• 4421</div>
+        </div>
+        <button className="text-xs text-primary font-semibold">Edit</button>
+      </div>
+
+      {/* Price protection card */}
+      <div className="rounded-3xl grad-hero p-5 relative overflow-hidden border border-white/5">
+        <div className="absolute -top-20 -right-20 w-56 h-56 rounded-full opacity-30 blur-3xl grad-teal" />
+        <div className="relative flex items-start justify-between">
+          <div>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">Price Protection</div>
+            <div className="text-lg font-semibold mt-1">Auto-shield your stack</div>
+          </div>
+          <Toggle on={protection} onChange={setProtection} />
+        </div>
+        <div className="relative mt-4 text-sm text-muted-foreground">
+          Protect if Bitcoin drops by <span className="text-foreground font-semibold">{threshold}%</span>.
+        </div>
+        <div className="relative mt-3 flex gap-2">
+          {[2, 5, 10].map((v) => (
+            <button
+              key={v}
+              onClick={() => setThreshold(v)}
+              className={`flex-1 py-2 rounded-xl text-xs font-semibold transition ${threshold === v ? "grad-teal text-background" : "glass text-muted-foreground"}`}
+            >
+              {v}%
+            </button>
+          ))}
+        </div>
+        <div className="relative mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+          <ShieldCheck className="w-3.5 h-3.5" /> Triggered 1 time this month
+        </div>
+      </div>
+
+      {/* Settings */}
+      <Section title="Security">
+        <Row icon={Fingerprint} label="Biometrics" right={<Toggle on={biometrics} onChange={setBiometrics} />} />
+        <Row icon={Lock} label="App PIN" right={<ChevronRight className="w-4 h-4 text-muted-foreground" />} />
+      </Section>
+
+      <Section title="Preferences">
+        <Row icon={Bell} label="Notifications" right={<ChevronRight className="w-4 h-4 text-muted-foreground" />} />
+        <Row icon={HelpCircle} label="Help & Support" right={<ChevronRight className="w-4 h-4 text-muted-foreground" />} />
+        <Row icon={Info} label="About UStack" right={<ChevronRight className="w-4 h-4 text-muted-foreground" />} />
+      </Section>
+
+      <button className="rounded-2xl bg-card/60 p-4 flex items-center justify-center gap-2 text-sm text-destructive font-medium">
+        <LogOut className="w-4 h-4" /> Log out
+      </button>
+    </div>
+  );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <div className="text-xs uppercase tracking-widest text-muted-foreground px-1 mb-2">{title}</div>
+      <div className="rounded-2xl glass overflow-hidden">{children}</div>
+    </div>
+  );
+}
+function Row({ icon: Icon, label, right }: { icon: typeof Bell; label: string; right?: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-3 px-4 py-3.5 border-b border-white/5 last:border-0">
+      <Icon className="w-4 h-4 text-muted-foreground" />
+      <span className="flex-1 text-sm">{label}</span>
+      {right}
+    </div>
+  );
+}
+function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <button onClick={() => onChange(!on)} className={`w-12 h-7 rounded-full p-0.5 transition ${on ? "grad-coral" : "bg-white/10"}`}>
+      <motion.div layout className={`w-6 h-6 rounded-full bg-white shadow ${on ? "ml-auto" : ""}`} />
+    </button>
+  );
+}

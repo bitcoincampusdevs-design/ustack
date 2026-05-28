@@ -1,29 +1,53 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import { useEffect } from "react";
+import { PhoneFrame } from "@/components/ustack/PhoneFrame";
+import { Logo } from "@/components/ustack/Logo";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "UStack — Stack Bitcoin. Stay Disciplined." },
+      { name: "description", content: "Save Bitcoin the smart way with UStack — vault-based savings built for discipline, not trading." },
+      { property: "og:title", content: "UStack — Stack Bitcoin. Stay Disciplined." },
+      { property: "og:description", content: "Save Bitcoin the smart way with UStack — vault-based savings built for discipline, not trading." },
     ],
   }),
-  component: Index,
+  component: Splash,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Splash() {
+  const nav = useNavigate();
+  useEffect(() => {
+    const t = setTimeout(() => nav({ to: "/welcome" }), 2200);
+    return () => clearTimeout(t);
+  }, [nav]);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <PhoneFrame>
+      <div className="h-full min-h-screen md:min-h-[860px] flex flex-col items-center justify-center gap-8 grad-hero">
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: [0.9, 1.04, 1], opacity: 1 }}
+          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <motion.div
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Logo size={96} glow />
+          </motion.div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="text-center px-6"
+        >
+          <div className="text-3xl font-semibold tracking-tight">UStack</div>
+          <div className="mt-2 text-sm text-muted-foreground">Stack Bitcoin. Stay Disciplined.</div>
+        </motion.div>
+      </div>
+    </PhoneFrame>
   );
 }
