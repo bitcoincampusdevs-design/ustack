@@ -49,7 +49,7 @@ export const vaults: Vault[] = [
 export const activity: Activity[] = [
   { id: "a1", kind: "deposit", title: "You added 20,000 sats", meta: "Tuition Vault · Mobile Money", when: "2h ago" },
   { id: "a2", kind: "milestone", title: "Emergency Savings reached 60%", meta: "Milestone unlocked", when: "Yesterday" },
-  { id: "a3", kind: "streak", title: "7 day stacking streak 🔥", meta: "Keep it going!", when: "2d ago" },
+  { id: "a3", kind: "streak", title: "7 day stacking streak", meta: "Keep it going!", when: "2d ago" },
   { id: "a4", kind: "deposit", title: "You added 50,000 sats", meta: "Laptop Fund · Lightning", when: "3d ago" },
   { id: "a5", kind: "protection", title: "Price protection triggered", meta: "BTC dipped 3.2%", when: "5d ago" },
   { id: "a6", kind: "vault", title: "Created Travel Goal vault", meta: "Stack Vault · 120 days", when: "1w ago" },
@@ -58,14 +58,14 @@ export const activity: Activity[] = [
 export const notifications: Notif[] = [
   { id: "n1", kind: "milestone", title: "Milestone reached", body: "Emergency Savings hit 60% of goal.", when: "2h ago", unread: true },
   { id: "n2", kind: "deposit", title: "Deposit successful", body: "20,000 sats added to Tuition Vault.", when: "2h ago", unread: true },
-  { id: "n3", kind: "protection", title: "Protection triggered", body: "BTC dropped 3.2% — your stack is shielded.", when: "5d ago" },
+  { id: "n3", kind: "protection", title: "Protection triggered", body: "BTC dropped 3.2%. Your stack is shielded.", when: "5d ago" },
   { id: "n4", kind: "summary", title: "Weekly summary", body: "You stacked 142,000 sats this week.", when: "Mon" },
   { id: "n5", kind: "warning", title: "Penalty reminder", body: "Withdrawing from a Hodl Vault may slow your progress.", when: "1w ago" },
 ];
 
 export const tips = [
   { title: "Stack a little, often", body: "Small recurring deposits beat large irregular ones. Consistency builds the habit." },
-  { title: "Name your goal", body: "Vaults with clear names — Tuition, Laptop — are 3× more likely to be completed." },
+  { title: "Name your goal", body: "Vaults with clear names, like Tuition or Laptop, are 3x more likely to be completed." },
   { title: "Lock to commit", body: "Hodl Vaults are harder to touch. That's the point. Future you will say thanks." },
   { title: "Celebrate milestones", body: "Hitting 25%, 50%, 75% matters. Discipline compounds like sats." },
 ];

@@ -50,13 +50,13 @@ export function CreateVaultSheet({ open, onClose, onDeposit }: { open: boolean; 
                   active={type === "hodl"} onClick={() => setType("hodl")}
                   icon={Lock} grad="grad-coral"
                   title="Hodl Vault"
-                  sub="Lock sats for a set time period — e.g. 6 months. Funds are frozen until the lock expires."
+                  sub="Lock sats for a set time period, e.g. 6 months. Funds are frozen until the lock expires."
                 />
                 <TypeCard
                   active={type === "stack"} onClick={() => setType("stack")}
                   icon={TrendingUp} grad="grad-teal"
                   title="Stack Vault"
-                  sub="Stack until you hit a target amount — e.g. 1,000,000 sats. Withdraw anytime with a small penalty."
+                  sub="Stack until you hit a target amount, e.g. 1,000,000 sats. Withdraw anytime with a small penalty."
                 />
               </div>
             </div>
@@ -115,7 +115,7 @@ export function CreateVaultSheet({ open, onClose, onDeposit }: { open: boolean; 
             <div>
               <div className="text-xl font-semibold">Set lock duration</div>
               <div className="text-sm text-muted-foreground mt-1 mb-5">
-                Your sats will be frozen for this period — no withdrawals until time's up.
+                Your sats will be frozen for this period. No withdrawals until time's up.
               </div>
               <div className="flex flex-col gap-2">
                 {LOCK_OPTIONS.map((opt) => (
@@ -141,11 +141,11 @@ export function CreateVaultSheet({ open, onClose, onDeposit }: { open: boolean; 
           {step === 3 && type === "stack" && (
             <div>
               <div className="text-xl font-semibold">How it works</div>
-              <div className="text-sm text-muted-foreground mt-1 mb-5">Stack vault rules — simple and flexible.</div>
+              <div className="text-sm text-muted-foreground mt-1 mb-5">Stack vault rules: simple and flexible.</div>
               <div className="flex flex-col gap-3">
-                <RuleRow icon="🎯" title="Stack to your target" body={`Keep depositing until you hit ${goal.toLocaleString()} sats.`} />
-                <RuleRow icon="💸" title="Early withdrawal" body="You can withdraw anytime, but a 2.5% penalty applies if you haven't reached your goal." />
-                <RuleRow icon="🔥" title="Streak rewards" body="Deposit consistently to build your streak and stay disciplined." />
+                <RuleRow title="Stack to your target" body={`Keep depositing until you hit ${goal.toLocaleString()} sats.`} />
+                <RuleRow title="Early withdrawal" body="You can withdraw anytime, but a 2.5% penalty applies if you haven't reached your goal." />
+                <RuleRow title="Streak rewards" body="Deposit consistently to build your streak and stay disciplined." />
               </div>
             </div>
           )}
@@ -156,20 +156,20 @@ export function CreateVaultSheet({ open, onClose, onDeposit }: { open: boolean; 
               <div className="text-xl font-semibold">Confirm vault</div>
               <div className="text-sm text-muted-foreground mt-1">Review and create.</div>
               <div className="mt-5 rounded-2xl glass p-5 flex flex-col gap-3">
-                <Summary k="Type" v={type === "hodl" ? "🔒 Hodl Vault" : "📈 Stack Vault"} />
+                <Summary k="Type" v={type === "hodl" ? "Hodl Vault" : "Stack Vault"} />
                 <Summary k="Name" v={name || "Untitled"} />
                 <Summary k="Target" v={`${goal.toLocaleString()} sats`} />
                 {type === "hodl"
                   ? <Summary k="Lock duration" v={LOCK_OPTIONS.find(o => o.months === lockMonths)?.label ?? `${lockMonths}mo`} />
                   : <Summary k="Withdrawals" v="Flexible (2.5% early penalty)" />
                 }
-                <Summary k="Penalty on early exit" v={type === "hodl" ? "Not allowed — time-locked" : "2.5% of amount"} />
+                <Summary k="Penalty on early exit" v={type === "hodl" ? "Not allowed (time-locked)" : "2.5% of amount"} />
               </div>
               <div className="mt-4 rounded-xl bg-white/5 px-4 py-3 flex items-start gap-2">
                 <ShieldCheck className="w-4 h-4 text-[oklch(0.78_0.14_190)] mt-0.5 shrink-0" />
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   {type === "hodl"
-                    ? `Your sats will be fully locked for ${LOCK_OPTIONS.find(o => o.months === lockMonths)?.label}. This is intentional — it keeps your future self protected.`
+                    ? `Your sats will be fully locked for ${LOCK_OPTIONS.find(o => o.months === lockMonths)?.label}. This is intentional. It keeps your future self protected.`
                     : "You can withdraw at any time. The 2.5% penalty is there to keep you disciplined, not to punish you."}
                 </p>
               </div>
@@ -213,14 +213,11 @@ function TypeCard({ active, onClick, icon: Icon, title, sub, grad }: { active: b
   );
 }
 
-function RuleRow({ icon, title, body }: { icon: string; title: string; body: string }) {
+function RuleRow({ title, body }: { title: string; body: string }) {
   return (
-    <div className="rounded-2xl glass p-4 flex items-start gap-3">
-      <span className="text-xl">{icon}</span>
-      <div>
-        <div className="text-sm font-semibold">{title}</div>
-        <div className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{body}</div>
-      </div>
+    <div className="rounded-2xl glass p-4">
+      <div className="text-sm font-semibold">{title}</div>
+      <div className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{body}</div>
     </div>
   );
 }

@@ -8,11 +8,11 @@ type View = "help" | "about";
 const faqs = [
   {
     q: "What is a Hodl Vault?",
-    a: "A Hodl Vault locks your sats for a set time period — e.g. 6 months. You cannot withdraw until the lock expires. This is intentional — it keeps your future self protected from impulse decisions.",
+    a: "A Hodl Vault locks your sats for a set time period, e.g. 6 months. You cannot withdraw until the lock expires. This is intentional: it keeps your future self protected from impulse decisions.",
   },
   {
     q: "What is a Stack Vault?",
-    a: "A Stack Vault lets you save toward a target amount — e.g. 1,000,000 sats. You can withdraw anytime but a 2.5% early penalty applies to keep you on track.",
+    a: "A Stack Vault lets you save toward a target amount, e.g. 1,000,000 sats. You can withdraw anytime but a 2.5% early penalty applies to keep you on track.",
   },
   {
     q: "What is Price Protection?",
@@ -20,7 +20,7 @@ const faqs = [
   },
   {
     q: "How are my sats stored?",
-    a: "UStack is non-custodial. Your keys are yours. We never hold your funds — we just make the saving experience beautiful and disciplined.",
+    a: "UStack is non-custodial. Your keys are yours. We never hold your funds. We just make the saving experience clean and disciplined.",
   },
   {
     q: "What payment methods are supported?",
@@ -116,7 +116,7 @@ export function HelpSheet({ open, onClose }: { open: boolean; onClose: () => voi
             <div className="text-xl font-semibold">UStack</div>
             <div className="text-xs text-muted-foreground">Version 1.0.0</div>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              Save Bitcoin the smart way. Vault-based savings built for discipline — not trading. Built for Zambia and Africa.
+              Save Bitcoin the smart way. Vault-based savings built for discipline, not trading. Built for Zambia and Africa.
             </p>
           </div>
 
@@ -125,7 +125,7 @@ export function HelpSheet({ open, onClose }: { open: boolean; onClose: () => voi
               { icon: Shield, title: "Non-custodial", body: "Your keys. Your coins. We never hold your funds.", grad: "grad-teal" },
               { icon: Lock, title: "Privacy first", body: "Minimal data collection. No selling your information.", grad: "grad-mint" },
               { icon: Zap, title: "Lightning fast", body: "Instant Lightning Network deposits and withdrawals.", grad: "grad-btc" },
-              { icon: Info, title: "Open building", body: "Made with love in Zambia 🇿🇲. Africa-native Bitcoin savings.", grad: "grad-coral" },
+              { icon: Info, title: "Open building", body: "Made in Zambia. Africa-native Bitcoin savings.", grad: "grad-coral" },
             ].map(({ icon: Icon, title, body, grad }) => (
               <div key={title} className="rounded-2xl glass p-4 flex items-start gap-3">
                 <div className={`w-10 h-10 rounded-xl ${grad} flex items-center justify-center shrink-0`}>

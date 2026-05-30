@@ -35,8 +35,8 @@ export function WithdrawSheet({ open, onClose }: { open: boolean; onClose: () =>
   return (
     <Sheet open={open} onClose={reset} title={
       step === "vault" ? "Withdraw from Vault" :
-      step === "locked" ? `${vault?.emoji} ${vault?.name}` :
-      step === "amount" ? `${vault?.emoji} ${vault?.name}` :
+      step === "locked" ? vault?.name :
+      step === "amount" ? vault?.name :
       step === "warning" ? "Early Withdrawal" :
       "Withdrawal Sent"
     }>
@@ -55,9 +55,7 @@ export function WithdrawSheet({ open, onClose }: { open: boolean; onClose: () =>
                     onClick={() => selectVault(v)}
                     className="flex items-center gap-3 rounded-2xl glass p-4 text-left transition active:scale-[0.98]"
                   >
-                    <div className={`w-11 h-11 rounded-xl ${accentGrad[v.accent]} flex items-center justify-center text-xl shrink-0`}>
-                      {v.emoji}
-                    </div>
+                    <div className={`w-11 h-11 rounded-xl ${accentGrad[v.accent]} flex items-center justify-center shrink-0`} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-semibold truncate">{v.name}</span>
@@ -94,7 +92,7 @@ export function WithdrawSheet({ open, onClose }: { open: boolean; onClose: () =>
               </div>
               <div className="text-base font-semibold">This vault is locked</div>
               <div className="text-sm text-muted-foreground leading-relaxed">
-                <span className="font-semibold text-foreground">{vault.name}</span> is a Hodl Vault — sats are time-locked and cannot be withdrawn until the lock period expires.
+                <span className="font-semibold text-foreground">{vault.name}</span> is a Hodl Vault. Sats are time-locked and cannot be withdrawn until the lock period expires.
               </div>
               <div className="w-full rounded-xl bg-white/5 p-4 flex items-center justify-between">
                 <span className="text-xs text-muted-foreground">Days remaining</span>
@@ -104,7 +102,7 @@ export function WithdrawSheet({ open, onClose }: { open: boolean; onClose: () =>
                 <span className="text-xs text-muted-foreground">Progress</span>
                 <span className="text-sm font-semibold">{Math.round(pct * 100)}% of goal</span>
               </div>
-              <p className="text-xs text-muted-foreground">Stay disciplined — future you will be grateful. 🙏</p>
+              <p className="text-xs text-muted-foreground">Stay disciplined. Future you will be grateful.</p>
             </div>
             <button
               onClick={() => setStep("vault")}
@@ -128,7 +126,7 @@ export function WithdrawSheet({ open, onClose }: { open: boolean; onClose: () =>
             <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Withdrawal method</div>
             <div className="grid grid-cols-2 gap-3 mb-5">
               <MethodCard active={method === "lightning"} onClick={() => setMethod("lightning")} icon={Zap} label="Lightning" sub="Instant" />
-              <MethodCard active={method === "momo"} onClick={() => setMethod("momo")} icon={Smartphone} label="Mobile Money" sub="2–5 min" />
+              <MethodCard active={method === "momo"} onClick={() => setMethod("momo")} icon={Smartphone} label="Mobile Money" sub="2-5 min" />
             </div>
 
             <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Amount</div>
@@ -149,7 +147,7 @@ export function WithdrawSheet({ open, onClose }: { open: boolean; onClose: () =>
             {isEarly && (
               <div className="mt-3 flex items-center gap-2 rounded-xl bg-[oklch(0.74_0.18_25)]/10 border border-[oklch(0.74_0.18_25)]/20 px-3 py-2">
                 <AlertTriangle className="w-3.5 h-3.5 text-[oklch(0.74_0.18_25)] shrink-0" />
-                <span className="text-xs text-muted-foreground">Vault is at <span className="text-foreground font-semibold">{Math.round(pct * 100)}%</span> — early withdrawal applies a 2.5% penalty.</span>
+                <span className="text-xs text-muted-foreground">Vault is at <span className="text-foreground font-semibold">{Math.round(pct * 100)}%</span>. Early withdrawal applies a 2.5% penalty.</span>
               </div>
             )}
 
@@ -187,7 +185,7 @@ export function WithdrawSheet({ open, onClose }: { open: boolean; onClose: () =>
                 </div>
               </div>
               <p className="mt-3 text-xs text-muted-foreground">
-                You're <span className="text-foreground font-semibold">{Math.round(pct * 100)}%</span> of the way to your goal in <span className="text-foreground font-semibold">{vault.name}</span>. Future you might thank you for holding on. 💪
+                You're <span className="text-foreground font-semibold">{Math.round(pct * 100)}%</span> of the way to your goal in <span className="text-foreground font-semibold">{vault.name}</span>. Future you might thank you for holding on.
               </p>
             </div>
 
@@ -220,8 +218,8 @@ export function WithdrawSheet({ open, onClose }: { open: boolean; onClose: () =>
               <span className="text-foreground font-semibold">{fmtSats(Number(amount) - (isEarly ? penalty : 0))}</span> will arrive via {method === "lightning" ? "Lightning" : "Mobile Money"} shortly.
             </div>
             <div className="w-full rounded-2xl glass p-4 text-left flex flex-col gap-2 text-xs text-muted-foreground">
-              <div className="flex justify-between"><span>Vault</span><span className="text-foreground font-medium">{vault.emoji} {vault.name}</span></div>
-              <div className="flex justify-between"><span>Method</span><span className="text-foreground font-medium">{method === "lightning" ? "⚡ Lightning" : "📱 Mobile Money"}</span></div>
+              <div className="flex justify-between"><span>Vault</span><span className="text-foreground font-medium">{vault.name}</span></div>
+              <div className="flex justify-between"><span>Method</span><span className="text-foreground font-medium">{method === "lightning" ? "Lightning" : "Mobile Money"}</span></div>
               <div className="flex justify-between"><span>Amount</span><span className="text-foreground font-medium">{fmtSats(Number(amount) - (isEarly ? penalty : 0))}</span></div>
             </div>
             <button onClick={reset} className="mt-2 w-full grad-teal text-primary-foreground font-semibold py-4 rounded-2xl">

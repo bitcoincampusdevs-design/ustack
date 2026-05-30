@@ -11,7 +11,7 @@ export function VaultDetailSheet({ open, vault, onClose, onDeposit, onWithdraw }
   if (!vault) return <Sheet open={open} onClose={onClose}><div /></Sheet>;
   const pct = vault.currentSats / vault.goalSats;
   return (
-    <Sheet open={open} onClose={onClose} title={`${vault.emoji} ${vault.name}`}>
+    <Sheet open={open} onClose={onClose} title={vault.name}>
       <div className={`relative rounded-3xl p-6 ${gradMap[vault.accent]} overflow-hidden shadow-float`}>
         <div className="absolute inset-0 bg-background/50 backdrop-blur-xl" />
         <div className="relative flex items-center gap-5">
@@ -46,7 +46,7 @@ export function VaultDetailSheet({ open, vault, onClose, onDeposit, onWithdraw }
             return (
               <div key={i} className={`flex-1 rounded-xl p-3 text-center border ${hit ? "bg-card border-primary/30" : "bg-card/40 border-transparent"}`}>
                 <div className="text-xs font-semibold">{m * 100}%</div>
-                <div className="text-[10px] text-muted-foreground">{hit ? "✓" : "—"}</div>
+                <div className="text-[10px] text-muted-foreground">{hit ? "✓" : "-"}</div>
               </div>
             );
           })}

@@ -20,7 +20,7 @@ export function HomeScreen({ onOpenVault, onDeposit, onWithdraw, onSend, onCreat
     <div className="px-5 pt-2 flex flex-col gap-6">
       {/* Greeting */}
       <div>
-        <div className="text-sm text-muted-foreground">Hello, Norman 👋</div>
+        <div className="text-sm text-muted-foreground">Hello, Norman</div>
         <div className="text-xs text-muted-foreground/70">Keep stacking. Stay calm.</div>
       </div>
 
@@ -210,7 +210,7 @@ function Insights() {
     <div className="grid grid-cols-2 gap-3">
       <div className="rounded-2xl glass p-4">
         <div className="text-xs text-muted-foreground">Streak</div>
-        <div className="text-2xl font-semibold mt-1">41 days 🔥</div>
+        <div className="text-2xl font-semibold mt-1">41 days</div>
         <div className="text-xs text-muted-foreground mt-1">Longest yet</div>
       </div>
       <div className="rounded-2xl glass p-4 flex items-center gap-3">

@@ -28,7 +28,7 @@ export function VaultCard({ vault, onClick, large = false }: { vault: Vault; onC
             {vault.type === "hodl" ? <Lock className="w-3 h-3" /> : <TrendingUp className="w-3 h-3" />}
             {vault.type === "hodl" ? "Hodl Vault" : "Stack Vault"}
           </div>
-          <div className="text-base font-semibold mt-1 leading-tight">{vault.emoji} {vault.name}</div>
+          <div className="text-base font-semibold mt-1 leading-tight">{vault.name}</div>
         </div>
         <ProgressRing value={pct} size={52} accent={vault.accent}>
           <span className="text-[10px] font-semibold tabular-nums">{Math.round(pct * 100)}%</span>
@@ -50,7 +50,7 @@ export function VaultCard({ vault, onClick, large = false }: { vault: Vault; onC
           <div className="text-[10px] text-muted-foreground">
             {vault.type === "hodl" ? "Time-locked" : "Flexible"}
           </div>
-          <div className="text-xs font-medium">🔥 {vault.streakDays}d</div>
+          <div className="text-xs font-medium">{vault.streakDays}d streak</div>
         </div>
       </div>
 

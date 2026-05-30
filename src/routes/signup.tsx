@@ -8,7 +8,7 @@ import { Logo } from "@/components/ustack/Logo";
 export const Route = createFileRoute("/signup")({
   head: () => ({
     meta: [
-      { title: "Create Account — UStack" },
+      { title: "Create Account - UStack" },
       { name: "description", content: "Start saving Bitcoin with UStack." },
     ],
   }),
@@ -99,7 +99,7 @@ function Signup() {
                 </div>
 
                 <div className="mt-5 glass rounded-2xl p-4 text-xs text-muted-foreground leading-relaxed">
-                  🔒 We never sell your data. No aggressive KYC — just what's needed to keep your stack safe.
+                  We never sell your data. No aggressive KYC, just what's needed to keep your stack safe.
                 </div>
 
                 <div className="flex-1" />

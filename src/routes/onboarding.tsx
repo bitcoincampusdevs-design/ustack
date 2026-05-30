@@ -5,7 +5,7 @@ import { Lock, TrendingUp, Shield } from "lucide-react";
 import { PhoneFrame } from "@/components/ustack/PhoneFrame";
 
 export const Route = createFileRoute("/onboarding")({
-  head: () => ({ meta: [{ title: "Get Started — UStack" }, { name: "description", content: "Learn how Hodl and Stack vaults work." }] }),
+  head: () => ({ meta: [{ title: "Get Started - UStack" }, { name: "description", content: "Learn how Hodl and Stack vaults work." }] }),
   component: Onboarding,
 });
 
@@ -28,7 +28,7 @@ const slides = [
     icon: Shield,
     accent: "mint" as const,
     title: "Early withdrawals include penalties.",
-    sub: "A gentle nudge to keep you on track — not punishment.",
+    sub: "A gentle nudge to keep you on track, not punishment.",
     art: "shield",
   },
 ];

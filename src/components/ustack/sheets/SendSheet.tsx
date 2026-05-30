@@ -29,7 +29,7 @@ export function SendSheet({ open, onClose }: { open: boolean; onClose: () => voi
               />
               <MethodCard
                 active={method === "momo"} onClick={() => setMethod("momo")}
-                icon={Smartphone} label="Mobile Money" sub="2–5 min"
+                icon={Smartphone} label="Mobile Money" sub="2-5 min"
               />
             </div>
 
@@ -80,11 +80,11 @@ export function SendSheet({ open, onClose }: { open: boolean; onClose: () => voi
             </motion.div>
             <div className="text-lg font-semibold">Sent!</div>
             <div className="text-sm text-muted-foreground leading-relaxed">
-              <span className="text-foreground font-semibold">{fmtSats(Number(amount))}</span> sent via {method === "lightning" ? "⚡ Lightning" : "📱 Mobile Money"}.
+              <span className="text-foreground font-semibold">{fmtSats(Number(amount))}</span> sent via {method === "lightning" ? "Lightning" : "Mobile Money"}.
             </div>
             <div className="w-full rounded-2xl glass p-4 text-left flex flex-col gap-2 text-xs text-muted-foreground">
               <div className="flex justify-between"><span>To</span><span className="text-foreground font-medium truncate max-w-[180px]">{address}</span></div>
-              <div className="flex justify-between"><span>Method</span><span className="text-foreground font-medium">{method === "lightning" ? "⚡ Lightning" : "📱 Mobile Money"}</span></div>
+              <div className="flex justify-between"><span>Method</span><span className="text-foreground font-medium">{method === "lightning" ? "Lightning" : "Mobile Money"}</span></div>
               <div className="flex justify-between"><span>Amount</span><span className="text-foreground font-medium">{fmtSats(Number(amount))}</span></div>
             </div>
             <button onClick={reset} className="mt-2 w-full grad-mint text-primary-foreground font-semibold py-4 rounded-2xl">

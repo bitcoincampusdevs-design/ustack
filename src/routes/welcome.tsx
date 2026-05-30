@@ -6,7 +6,7 @@ import { Logo } from "@/components/ustack/Logo";
 export const Route = createFileRoute("/welcome")({
   head: () => ({
     meta: [
-      { title: "Welcome — UStack" },
+      { title: "Welcome - UStack" },
       { name: "description", content: "Build long-term Bitcoin habits with UStack." },
     ],
   }),

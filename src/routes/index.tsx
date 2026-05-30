@@ -7,10 +7,10 @@ import { Logo } from "@/components/ustack/Logo";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "UStack — Stack Bitcoin. Stay Disciplined." },
-      { name: "description", content: "Save Bitcoin the smart way with UStack — vault-based savings built for discipline, not trading." },
-      { property: "og:title", content: "UStack — Stack Bitcoin. Stay Disciplined." },
-      { property: "og:description", content: "Save Bitcoin the smart way with UStack — vault-based savings built for discipline, not trading." },
+      { title: "UStack: Stack Bitcoin. Stay Disciplined." },
+      { name: "description", content: "Save Bitcoin the smart way with UStack. Vault-based savings built for discipline, not trading." },
+      { property: "og:title", content: "UStack: Stack Bitcoin. Stay Disciplined." },
+      { property: "og:description", content: "Save Bitcoin the smart way with UStack. Vault-based savings built for discipline, not trading." },
     ],
   }),
   component: Splash,

@@ -8,7 +8,7 @@ import { Logo } from "@/components/ustack/Logo";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Log in — UStack" },
+      { title: "Log in - UStack" },
       { name: "description", content: "Log back in to your UStack account." },
     ],
   }),
