@@ -326,6 +326,12 @@ export function DepositSheet({
                           </button>
                         </div>
                         <p className="text-xs text-muted-foreground text-center">Scan with any Lightning wallet or copy the invoice to pay.</p>
+                        <button
+                          onClick={confirm}
+                          className="w-full flex items-center justify-center gap-2 grad-btc text-background font-semibold py-4 rounded-2xl shadow-soft active:scale-[0.98] transition"
+                        >
+                          <Zap className="w-4 h-4" /> Pay Now
+                        </button>
                       </motion.div>
                     )}
                   </AnimatePresence>
