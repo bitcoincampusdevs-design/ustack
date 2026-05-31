@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Smartphone, Zap, Copy, Check, Wallet, LayoutGrid, ChevronRight, TrendingUp, Lock, ArrowLeft } from "lucide-react";
+import {
+  Smartphone, Zap, Copy, Check, Wallet, LayoutGrid,
+  ChevronRight, TrendingUp, Lock, ArrowLeft, X as XIcon
+} from "lucide-react";
 import { Sheet } from "./Sheet";
 import { vaults, fmtSats, type Vault } from "@/lib/ustack-data";
 
@@ -11,12 +14,16 @@ const accentGrad: Record<string, string> = {
   coral: "grad-coral", teal: "grad-teal", mint: "grad-mint", aqua: "grad-teal", btc: "grad-btc",
 };
 
+const PROVIDERS = ["Airtel", "MTN MoMo", "Zamtel"];
+const QUICK_AMOUNTS = ["500", "1000", "2500", "5000"];
+
 export function DepositSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [step, setStep] = useState<Step>("dest");
   const [dest, setDest] = useState<Dest>("balance");
   const [selectedVault, setSelectedVault] = useState<Vault | null>(null);
   const [tab, setTab] = useState<"momo" | "lightning">("momo");
   const [provider, setProvider] = useState("MTN MoMo");
+  const [phone, setPhone] = useState("");
   const [amount, setAmount] = useState("1000");
   const [copied, setCopied] = useState(false);
 
@@ -25,6 +32,7 @@ export function DepositSheet({ open, onClose }: { open: boolean; onClose: () => 
     setDest("balance");
     setSelectedVault(null);
     setTab("momo");
+    setPhone("");
     setAmount("1000");
     onClose();
   };
@@ -42,6 +50,11 @@ export function DepositSheet({ open, onClose }: { open: boolean; onClose: () => 
   const selectVault = (v: Vault) => {
     setSelectedVault(v);
     setStep("method");
+  };
+
+  const canConfirm = () => {
+    if (tab === "lightning") return true;
+    return phone.trim().length >= 9 && Number(amount) > 0;
   };
 
   const confirm = () => {
@@ -68,7 +81,6 @@ export function DepositSheet({ open, onClose }: { open: boolean; onClose: () => 
           <motion.div key="dest" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
             <p className="text-sm text-muted-foreground mb-5">Where should the funds go?</p>
             <div className="flex flex-col gap-3">
-
               <button
                 onClick={() => selectDest("balance")}
                 className="flex items-center gap-4 rounded-2xl glass p-5 text-left transition active:scale-[0.98] border border-transparent hover:border-white/10"
@@ -98,7 +110,6 @@ export function DepositSheet({ open, onClose }: { open: boolean; onClose: () => 
                 </div>
                 <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
               </button>
-
             </div>
           </motion.div>
         )}
@@ -147,7 +158,7 @@ export function DepositSheet({ open, onClose }: { open: boolean; onClose: () => 
           </motion.div>
         )}
 
-        {/* Step 3: Method & amount */}
+        {/* Step 3: Payment method & details */}
         {step === "method" && (
           <motion.div key="method" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
             <button
@@ -157,6 +168,7 @@ export function DepositSheet({ open, onClose }: { open: boolean; onClose: () => 
               <ArrowLeft className="w-3.5 h-3.5" /> Back
             </button>
 
+            {/* Tab switcher */}
             <div className="flex p-1 rounded-2xl bg-white/5 mb-5">
               {([["momo", "Mobile Money", Smartphone], ["lightning", "Lightning", Zap]] as const).map(([k, label, Icon]) => {
                 const active = tab === k;
@@ -172,53 +184,93 @@ export function DepositSheet({ open, onClose }: { open: boolean; onClose: () => 
 
             <AnimatePresence mode="wait">
               {tab === "momo" ? (
-                <motion.div key="momo" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                  <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Provider</div>
-                  <div className="grid grid-cols-3 gap-2">
-                    {["Airtel", "MTN MoMo", "Zamtel"].map((p) => (
-                      <button key={p} onClick={() => setProvider(p)} className={`py-3 rounded-xl text-xs font-medium transition ${provider === p ? "grad-coral text-background" : "glass text-muted-foreground"}`}>{p}</button>
-                    ))}
+                <motion.div key="momo" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col gap-5">
+                  {/* Provider */}
+                  <div>
+                    <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Provider</div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {PROVIDERS.map((p) => (
+                        <button key={p} onClick={() => setProvider(p)} className={`py-3 rounded-xl text-xs font-medium transition ${provider === p ? "grad-coral text-background" : "glass text-muted-foreground"}`}>{p}</button>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="text-xs uppercase tracking-widest text-muted-foreground mt-6 mb-2">Amount</div>
-                  <div className="rounded-2xl glass p-5 flex items-center justify-center gap-2">
-                    <input
-                      inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)}
-                      className="bg-transparent text-3xl font-semibold text-center tabular-nums focus:outline-none w-32"
-                    />
-                    <span className="text-sm text-muted-foreground">ZMW</span>
+                  {/* Phone number */}
+                  <div>
+                    <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Your mobile money number</div>
+                    <div className="rounded-2xl glass p-4 flex items-center gap-3">
+                      <div className="text-sm text-muted-foreground shrink-0">+260</div>
+                      <div className="w-px h-5 bg-white/10 shrink-0" />
+                      <input
+                        inputMode="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                        placeholder="97 123 4567"
+                        className="flex-1 bg-transparent text-sm focus:outline-none placeholder:text-muted-foreground/50 tracking-wide"
+                      />
+                      {phone && (
+                        <button onClick={() => setPhone("")} className="text-muted-foreground">
+                          <XIcon className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                    <div className="mt-1.5 text-[10px] text-muted-foreground pl-1">You will receive a prompt to approve the payment.</div>
                   </div>
-                  <div className="mt-2 flex gap-2">
-                    {["500", "1000", "2500", "5000"].map((v) => (
-                      <button key={v} onClick={() => setAmount(v)} className="flex-1 py-2 rounded-xl glass text-xs">{v}</button>
-                    ))}
+
+                  {/* Amount */}
+                  <div>
+                    <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Amount (ZMW)</div>
+                    <div className="rounded-2xl glass p-5 flex items-center justify-center gap-2">
+                      <input
+                        inputMode="decimal"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ""))}
+                        className="bg-transparent text-3xl font-semibold text-center tabular-nums focus:outline-none w-36"
+                        placeholder="0"
+                      />
+                      <span className="text-sm text-muted-foreground">ZMW</span>
+                    </div>
+                    <div className="mt-2 flex gap-2">
+                      {QUICK_AMOUNTS.map((v) => (
+                        <button key={v} onClick={() => setAmount(v)} className={`flex-1 py-2 rounded-xl text-xs transition ${amount === v ? "grad-coral text-background" : "glass text-muted-foreground"}`}>{v}</button>
+                      ))}
+                    </div>
                   </div>
 
                   {dest === "vault" && selectedVault && (
-                    <div className="mt-4 rounded-xl bg-white/5 px-4 py-3 flex items-center justify-between text-xs">
+                    <div className="rounded-xl bg-white/5 px-4 py-3 flex items-center justify-between text-xs">
                       <span className="text-muted-foreground">Depositing into</span>
                       <span className="font-semibold text-foreground">{selectedVault.name}</span>
                     </div>
                   )}
 
-                  <button onClick={confirm} className="mt-6 w-full grad-btc text-background font-semibold py-4 rounded-2xl shadow-soft active:scale-[0.98] transition">
+                  <button
+                    disabled={!canConfirm()}
+                    onClick={confirm}
+                    className="w-full grad-btc text-background font-semibold py-4 rounded-2xl shadow-soft active:scale-[0.98] transition disabled:opacity-40"
+                  >
                     Confirm deposit
                   </button>
                 </motion.div>
               ) : (
-                <motion.div key="ln" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center">
+                <motion.div key="ln" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center gap-4">
+                  <p className="text-sm text-muted-foreground text-center w-full">Scan or copy the invoice below to pay from any Lightning wallet.</p>
                   <div className="w-52 h-52 rounded-2xl bg-white p-4">
                     <FakeQR />
                   </div>
-                  <div className="mt-4 text-xs text-muted-foreground">Expires in <span className="text-foreground font-semibold">9:42</span></div>
-                  <div className="mt-4 w-full rounded-2xl bg-white/5 p-3 flex items-center gap-2">
+                  <div className="text-xs text-muted-foreground">Expires in <span className="text-foreground font-semibold">9:42</span></div>
+                  <div className="w-full rounded-2xl bg-white/5 p-3 flex items-center gap-2">
                     <code className="flex-1 truncate text-xs text-muted-foreground">lnbc500u1p3xyz...0w8h</code>
-                    <button onClick={() => { setCopied(true); setTimeout(() => setCopied(false), 1200); }} className="w-9 h-9 rounded-xl glass flex items-center justify-center">
-                      {copied ? <Check className="w-4 h-4 text-[oklch(0.86_0.13_160)]" /> : <Copy className="w-4 h-4" />}
+                    <button
+                      onClick={() => { setCopied(true); setTimeout(() => setCopied(false), 1200); }}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass text-xs font-medium"
+                    >
+                      {copied ? <Check className="w-3.5 h-3.5 text-[oklch(0.86_0.13_160)]" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copied ? "Copied" : "Copy"}
                     </button>
                   </div>
                   {dest === "vault" && selectedVault && (
-                    <div className="mt-3 w-full rounded-xl bg-white/5 px-4 py-3 flex items-center justify-between text-xs">
+                    <div className="w-full rounded-xl bg-white/5 px-4 py-3 flex items-center justify-between text-xs">
                       <span className="text-muted-foreground">Depositing into</span>
                       <span className="font-semibold text-foreground">{selectedVault.name}</span>
                     </div>
@@ -233,15 +285,20 @@ export function DepositSheet({ open, onClose }: { open: boolean; onClose: () => 
         {step === "processing" && (
           <motion.div key="processing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <div className="py-16 flex flex-col items-center gap-4">
-              <motion.div animate={{ rotate: 360 }} transition={{ duration: 1.4, repeat: Infinity, ease: "linear" }} className="w-12 h-12 rounded-full border-4 border-white/10 border-t-primary" />
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1.4, repeat: Infinity, ease: "linear" }}
+                className="w-12 h-12 rounded-full border-4 border-white/10 border-t-primary"
+              />
               <div className="text-sm text-muted-foreground">Processing your deposit...</div>
+              <div className="text-xs text-muted-foreground/60">Check your phone for a payment prompt.</div>
             </div>
           </motion.div>
         )}
 
         {/* Step 5: Done */}
         {step === "done" && (
-          <motion.div key="done" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="py-12 flex flex-col items-center gap-4 text-center">
+          <motion.div key="done" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="py-8 flex flex-col items-center gap-4 text-center">
             <motion.div
               initial={{ scale: 0 }} animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 200, damping: 18, delay: 0.1 }}
@@ -251,20 +308,27 @@ export function DepositSheet({ open, onClose }: { open: boolean; onClose: () => 
             </motion.div>
             <div className="text-xl font-semibold">Deposit confirmed</div>
             <div className="text-sm text-muted-foreground">Your stack just grew. Progress updated.</div>
-            <div className="w-full rounded-2xl glass p-4 text-left flex flex-col gap-2 text-xs text-muted-foreground">
+            <div className="w-full rounded-2xl glass p-4 text-left flex flex-col gap-2.5 text-xs text-muted-foreground">
               <div className="flex justify-between">
                 <span>Destination</span>
                 <span className="text-foreground font-medium">{destLabel}</span>
               </div>
               <div className="flex justify-between">
                 <span>Method</span>
-                <span className="text-foreground font-medium">{tab === "momo" ? `${provider}` : "Lightning"}</span>
+                <span className="text-foreground font-medium">{tab === "momo" ? provider : "Lightning"}</span>
               </div>
               {tab === "momo" && (
-                <div className="flex justify-between">
-                  <span>Amount</span>
-                  <span className="text-foreground font-medium">ZMW {amount}</span>
-                </div>
+                <>
+                  <div className="flex justify-between">
+                    <span>Phone</span>
+                    <span className="text-foreground font-medium">+260 {phone}</span>
+                  </div>
+                  <div className="h-px bg-white/10" />
+                  <div className="flex justify-between">
+                    <span>Amount</span>
+                    <span className="text-foreground font-medium">ZMW {amount}</span>
+                  </div>
+                </>
               )}
             </div>
             <button onClick={reset} className="mt-2 w-full grad-coral text-primary-foreground font-semibold py-4 rounded-2xl shadow-glow-coral">
@@ -284,7 +348,11 @@ function FakeQR() {
       {Array.from({ length: 32 * 32 }).map((_, i) => {
         const x = i % 32; const y = Math.floor(i / 32);
         const corner = (x < 7 && y < 7) || (x > 24 && y < 7) || (x < 7 && y > 24);
-        const on = corner ? ((x === 0 || x === 6 || y === 0 || y === 6 || (x >= 2 && x <= 4 && y >= 2 && y <= 4)) || (x > 24 && (x === 25 || x === 31 || y === 0 || y === 6 || (x >= 27 && x <= 29 && y >= 2 && y <= 4))) || (y > 24 && (x === 0 || x === 6 || y === 25 || y === 31 || (x >= 2 && x <= 4 && y >= 27 && y <= 29)))) : ((x * 7 + y * 13 + ((x * y) % 5)) % 3 === 0);
+        const on = corner
+          ? ((x === 0 || x === 6 || y === 0 || y === 6 || (x >= 2 && x <= 4 && y >= 2 && y <= 4)) ||
+            (x > 24 && (x === 25 || x === 31 || y === 0 || y === 6 || (x >= 27 && x <= 29 && y >= 2 && y <= 4))) ||
+            (y > 24 && (x === 0 || x === 6 || y === 25 || y === 31 || (x >= 2 && x <= 4 && y >= 27 && y <= 29))))
+          : ((x * 7 + y * 13 + ((x * y) % 5)) % 3 === 0);
         return on ? <rect key={i} x={x} y={y} width={1} height={1} fill="black" /> : null;
       })}
     </svg>
