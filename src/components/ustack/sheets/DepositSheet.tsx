@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Smartphone, Zap, Copy, Check, Wallet, LayoutGrid,
-  ChevronRight, TrendingUp, Lock, ArrowLeft, X as XIcon, QrCode
+  ChevronRight, TrendingUp, Lock, ArrowLeft, X as XIcon, QrCode, ExternalLink
 } from "lucide-react";
 import { Sheet } from "./Sheet";
 import { vaults, fmtSats, type Vault } from "@/lib/ustack-data";
@@ -16,6 +16,15 @@ const accentGrad: Record<string, string> = {
 
 const PROVIDERS = ["Airtel", "MTN MoMo", "Zamtel"];
 const QUICK_AMOUNTS = ["500", "1000", "2500", "5000"];
+
+const WALLETS = [
+  { name: "Blink",             bg: "bg-[#F7931A]",  initials: "BL", scheme: (inv: string) => `blink://lightning/${inv}` },
+  { name: "Wallet of Satoshi", bg: "bg-[#7C3AED]",  initials: "WS", scheme: (inv: string) => `lightning:${inv}` },
+  { name: "Muun",              bg: "bg-[#00C2A8]",  initials: "MU", scheme: (inv: string) => `muun://lightning/${inv}` },
+  { name: "BlueWallet",        bg: "bg-[#1D6FE9]",  initials: "BW", scheme: (inv: string) => `bluewallet:lightning?lnurl=${inv}` },
+  { name: "Phoenix",           bg: "bg-[#FF6B35]",  initials: "PH", scheme: (inv: string) => `phoenix://lightning/${inv}` },
+  { name: "Other wallet",      bg: "bg-white/10",   initials: "...", scheme: (inv: string) => `lightning:${inv}` },
+];
 
 export function DepositSheet({
   open, onClose, vaultContext,
@@ -34,6 +43,7 @@ export function DepositSheet({
   const [lnAmount, setLnAmount] = useState("");
   const [invoiceReady, setInvoiceReady] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [walletPickerOpen, setWalletPickerOpen] = useState(false);
 
   useEffect(() => {
     if (open && vaultContext) {
@@ -61,6 +71,7 @@ export function DepositSheet({
     setAmount("1000");
     setLnAmount("");
     setInvoiceReady(false);
+    setWalletPickerOpen(false);
     onClose();
   };
 
@@ -327,11 +338,47 @@ export function DepositSheet({
                         </div>
                         <p className="text-xs text-muted-foreground text-center">Scan with any Lightning wallet or copy the invoice to pay.</p>
                         <button
-                          onClick={confirm}
+                          onClick={() => setWalletPickerOpen((v) => !v)}
                           className="w-full flex items-center justify-center gap-2 grad-btc text-background font-semibold py-4 rounded-2xl shadow-soft active:scale-[0.98] transition"
                         >
                           <Zap className="w-4 h-4" /> Pay Now
                         </button>
+
+                        <AnimatePresence>
+                          {walletPickerOpen && (
+                            <motion.div
+                              key="wallet-list"
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                              className="overflow-hidden"
+                            >
+                              <div className="pt-1 pb-2">
+                                <div className="text-xs uppercase tracking-widest text-muted-foreground mb-3 px-1">Choose a wallet</div>
+                                <div className="flex flex-col gap-2">
+                                  {WALLETS.map((w) => (
+                                    <button
+                                      key={w.name}
+                                      onClick={() => {
+                                        const invoice = `lnbc${lnAmount}u1p3xyz0w8h`;
+                                        try { window.open(w.scheme(invoice), "_blank"); } catch {}
+                                        setTimeout(() => { setWalletPickerOpen(false); confirm(); }, 300);
+                                      }}
+                                      className="flex items-center gap-3 rounded-2xl glass px-4 py-3 text-left active:scale-[0.98] transition"
+                                    >
+                                      <div className={`w-10 h-10 rounded-xl ${w.bg} flex items-center justify-center shrink-0`}>
+                                        <span className="text-[11px] font-bold text-white">{w.initials}</span>
+                                      </div>
+                                      <span className="flex-1 text-sm font-medium">{w.name}</span>
+                                      <ExternalLink className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -394,6 +441,7 @@ export function DepositSheet({
         )}
 
       </AnimatePresence>
+
     </Sheet>
   );
 }
